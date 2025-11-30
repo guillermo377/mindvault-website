@@ -6,10 +6,36 @@ a { text-decoration: none; color: inherit; }
 
 /* NAVBAR */
 nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
-.logo { font-size: 1.5rem; font-weight: bold; color: #2c3e50; }
+.logo { 
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    color: #2c3e50;
+    /* Ajuste para alinear la imagen y el texto */
+    display: flex;
+    align-items: center;
+    gap: 0.5em; 
+}
+/* Estilo para el logo PNG */
+.logo .brain-logo {
+    height: 1.5em; 
+    width: auto;
+}
 .links a { margin-left: 20px; color: #555; font-weight: 500; transition: color 0.3s; }
 .links a:hover { color: #3498db; }
 .github-btn { background: #333; color: white !important; padding: 8px 15px; border-radius: 5px; }
+
+/* Selector de idioma */
+.lang-selector {
+    margin-left: 20px;
+    font-size: 0.9em;
+    font-weight: normal;
+}
+.lang-selector a {
+    color: #3498db !important;
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 0 5px;
+}
 
 /* HERO */
 header { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); text-align: center; padding: 100px 20px; }
@@ -36,6 +62,82 @@ h2 { font-size: 2rem; margin-bottom: 40px; color: #2c3e50; }
 .step { max-width: 250px; }
 .number { display: inline-block; width: 40px; height: 40px; background: #2c3e50; color: white; border-radius: 50%; line-height: 40px; font-weight: bold; margin-bottom: 15px; }
 
+/* SCHEMA DE USO */
+.schema-steps {
+    margin-bottom: 40px; 
+    padding: 20px 0;
+    gap: 10px; /* Reducir el espacio para las flechas */
+}
+.schema-steps .arrow {
+    font-size: 2rem;
+    color: #3498db;
+    margin: 0 10px;
+    align-self: center; /* Centra la flecha verticalmente */
+}
+.schema-steps .step {
+    max-width: 150px; 
+}
+
+/* NIVELES DE SEGURIDAD */
+.security-tiers-container {
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid #ccc;
+    text-align: center;
+}
+
+.security-tiers-container h3 {
+    font-size: 1.7rem;
+    color: #e74c3c; 
+    margin-bottom: 20px;
+}
+
+.tier-intro {
+    font-style: italic;
+    margin-bottom: 30px;
+    color: #666;
+}
+
+.tiers-grid {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.tier-card {
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    text-align: left;
+}
+
+.tier-card h4 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.tier-card:first-child h4 {
+    color: #f39c12; /* Naranja para nivel Bajo */
+}
+
+.tier-card:last-child h4 {
+    color: #2ecc71; /* Verde para nivel Alto */
+}
+
+.tier-benefit {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    padding: 15px;
+    background-color: #ecf0f1; 
+    border-radius: 5px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
 /* ABOUT */
 .about-container { max-width: 800px; text-align: center; }
 .about-text p { margin-bottom: 20px; font-size: 1.1rem; }
@@ -51,4 +153,8 @@ footer a { color: #bdc3c7; text-decoration: underline; }
     .nav { flex-direction: column; }
     .links { margin-top: 15px; }
     .cta-buttons { flex-direction: column; }
+    .tiers-grid {
+        flex-direction: column;
+        align-items: center;
+    }
 }
