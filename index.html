@@ -1,246 +1,544 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mind Vault | Stateless Password Generator</title>
-    <meta name="description" content="Generate unbreakable SHA-256 passwords without storage. No cloud, no database. Your mind is your fortress.">
-    <link rel="stylesheet" href="styles.css"> 
+    <title>Mind Vault - Stateless Password Generator | 100% Offline</title>
+    <meta name="description"
+        content="Mind Vault generates unique SHA-256 passwords without storing them. Completely offline, no database, no cloud. Your passwords are calculated on-demand.">
+    <meta name="keywords"
+        content="stateless password generator, offline password manager, no cloud storage, SHA-256 encryption, deterministic passwords">
+    <meta name="author" content="Guillermo Vélez">
+    <meta name="dateModified" content="2025-12-01">
+
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
     <link rel="icon" type="image/png" href="favicon.png">
-    
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          "name": "Mind Vault",
+          "applicationCategory": "SecurityApplication",
+          "operatingSystem": "Any (Browser-based)",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "description": "Stateless password generator using SHA-256 encryption. No database, no cloud storage, 100% offline operation.",
+          "author": {
+            "@type": "Person",
+            "name": "Guillermo Vélez",
+            "jobTitle": "IT Systems Architect"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does Mind Vault work without storing passwords?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Mind Vault uses deterministic password generation with SHA-256 encryption. You provide a master seed and service name, and it mathematically calculates the same unique password every time—without ever saving it."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Mind Vault safe if it doesn't store passwords?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Mind Vault is actually safer because there's no database to hack. Passwords are generated on-demand using cryptographic hashing (SHA-256)."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+
     <script>
         function setLanguage(lang) {
-            document.getElementById('en').style.display = (lang === 'en') ? 'block' : 'none';
-            document.getElementById('es').style.display = (lang === 'es') ? 'block' : 'none';
+            // Ocultar ambos primero
+            document.getElementById('en').style.display = 'none';
+            document.getElementById('es').style.display = 'none';
+            
+            // Mostrar el seleccionado
+            document.getElementById(lang).style.display = 'block';
+            
+            // Actualizar atributo lang
+            document.documentElement.lang = lang;
         }
-        window.onload = function() {
-            setLanguage('en'); // Establecer inglés como predeterminado al cargar
+        window.onload = function () {
+            setLanguage('en'); // Inglés por defecto
         };
     </script>
 </head>
+
 <body>
 
-    <nav>
-        <div class="logo">
-            <img src="mindvault_logo.png" alt="Mind Vault Logo: Brain with a lock" class="brain-logo"> Mind Vault
-        </div>
-        <div class="links">
-            <a href="#features">Features</a>
-            <a href="#how-it-works">How it Works</a>
-            <a href="#about">About Me</a>
-            <a href="https://github.com/guillermo377/MindVault" target="_blank" class="github-btn">GitHub</a>
-            
-            <span class="lang-selector">
-                <a href="#" onclick="setLanguage('en')">🇬🇧 EN</a> | 
-                <a href="#" onclick="setLanguage('es')">🇪🇸 ES</a>
-            </span>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="mindvault_logo.png" alt="Mind Vault Logo" width="33" height="33"
+                    class="d-inline-block align-text-top me-2">
+                MindVault
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-it-works">How it Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">About Me</a>
+                    </li>
+                    <li class="nav-item ms-lg-2">
+                        <a href="https://github.com/guillermo377/MindVault" target="_blank"
+                            class="btn btn-dark btn-sm text-white">GitHub</a>
+                    </li>
+                    <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+                        <span class="lang-selector">
+                            <a href="#" onclick="setLanguage('en'); return false;" class="text-decoration-none fw-bold">EN</a> |
+                            <a href="#" onclick="setLanguage('es'); return false;" class="text-decoration-none fw-bold">ES</a>
+                        </span>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
-    
+
     <div id="en">
-        <header>
-            <div class="hero-content">
-                <h1>Your Mind is Your Fortress.</h1>
-                <p>The only password manager that doesn't manage passwords.<br>Stateless. Offline. Unbreakable.</p>
-                
-                <div class="cta-buttons">
-                    <a href="#" class="btn-primary">Download for Chrome</a>
-                    <a href="https://github.com/guillermo377/MindVault" class="btn-secondary">View Source Code</a>
+        <div class="container-fluid bg-white border-bottom py-3">
+            <div class="container">
+                <p class="lead text-center mb-0">
+                    <strong>Mind Vault is a stateless password generator that creates unique SHA-256 passwords without
+                        storing them anywhere—no database, no cloud, 100% offline.</strong>
+                </p>
+            </div>
+        </div>
+
+        <header class="py-5 text-center bg-light-gradient">
+            <div class="container py-5">
+                <h1 class="display-4 fw-bold text-dark mb-3">Your Mind is Your Fortress.</h1>
+                <p class="lead text-secondary mb-4">The only password manager that doesn't manage
+                    passwords.<br>Stateless. Offline. Unbreakable.</p>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#" class="btn btn-primary btn-lg rounded-pill px-4">Download for Chrome</a>
+                    <a href="https://github.com/guillermo377/MindVault"
+                        class="btn btn-outline-secondary btn-lg rounded-pill px-4">View Source Code</a>
                 </div>
-                <p class="small-note">Version 1.0 • Free & Open Source</p>
+                <p class="text-muted mt-3 small">Version 1.0 • Free & Open Source</p>
             </div>
         </header>
 
-        <section id="features">
+        <section id="features" class="py-5">
             <div class="container">
-                <h2>Why Trust Mind Vault?</h2>
-                <div class="grid">
-                    <div class="card">
-                        <h3>🚫 No Database</h3>
-                        <p>Hackers can't steal what doesn't exist. We don't store your passwords; we calculate them mathematically on the fly.</p>
+                <h2 class="text-center mb-5 text-dark">Why is Mind Vault More Secure Than Traditional Password Managers?
+                </h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <h3 class="h4 text-primary mb-3">🚫 No Database</h3>
+                                <p class="card-text text-muted">Hackers can't steal what doesn't exist. We don't store
+                                    your passwords; we calculate them mathematically on the fly.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card">
-                        <h3>🔒 SHA-256 Encryption</h3>
-                        <p>Military-grade cryptography ensures that your Master Seed generates a unique, complex password for every site.</p>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <h3 class="h4 text-primary mb-3">🔒 SHA-256 Encryption</h3>
+                                <p class="card-text text-muted">Military-grade cryptography ensures that your Master
+                                    Seed generates a unique, complex password for every site.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card">
-                        <h3>✈️ 100% Offline</h3>
-                        <p>Mind Vault runs locally in your browser. No data ever leaves your device. No cloud syncing required.</p>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <h3 class="h4 text-primary mb-3">✈️ 100% Offline</h3>
+                                <p class="card-text text-muted">Mind Vault runs locally in your browser. No data ever
+                                    leaves your device. No cloud syncing required.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="how-it-works" class="bg-light">
-            <div class="container">
-                <h2>The Math Behind the Magic</h2>
-                <p>It's simple determinism. Input the same seed and service, get the same password.</p>
-                
-                <h3>How to Use Mind Vault (Schema)</h3>
-                <div class="steps schema-steps">
-                    <div class="step">
-                        <span class="number">1</span>
-                        <h4>Enter Master Seed</h4>
-                        <p>Your secret phrase (only you know it).</p>
+        <section id="how-it-works" class="py-5 bg-light">
+            <div class="container text-center">
+                <h2 class="mb-3 text-dark">How Does Mind Vault Generate Passwords Without Storing Them?</h2>
+                <p class="text-muted mb-5">It's simple determinism. Input the same seed and service, get the same
+                    password—every time, without saving anything.</p>
+
+                <h3 class="h5 mb-4">How to Use Mind Vault: 3 Simple Steps</h3>
+                <div class="row justify-content-center align-items-center g-4 mb-5">
+                    <div class="col-md-3">
+                        <div class="step-circle bg-dark text-white mx-auto mb-3">1</div>
+                        <h4 class="h6 fw-bold">Enter Master Seed</h4>
+                        <p class="small text-muted">Your secret phrase (only you know it).</p>
                     </div>
-                    <div class="step">
-                        <span class="arrow">➡️</span>
+                    <div class="col-md-1 d-none d-md-block">
+                        <span class="display-6 text-primary">➡️</span>
                     </div>
-                    <div class="step">
-                        <span class="number">2</span>
-                        <h4>Enter Service Name</h4>
-                        <p>The domain of the website (e.g., "google.com").</p>
+                    <div class="col-md-3">
+                        <div class="step-circle bg-dark text-white mx-auto mb-3">2</div>
+                        <h4 class="h6 fw-bold">Enter Service Name</h4>
+                        <p class="small text-muted">The domain of the website (e.g., "google.com").</p>
                     </div>
-                    <div class="step">
-                        <span class="arrow">➡️</span>
+                    <div class="col-md-1 d-none d-md-block">
+                        <span class="display-6 text-primary">➡️</span>
                     </div>
-                    <div class="step">
-                        <span class="number">3</span>
-                        <h4>Generate Hash</h4>
-                        <p>Mind Vault calculates a unique password using SHA-256.</p>
-                    </div>
-                </div>
-                <hr>
-                
-                <h3>Security Best Practice: Tiers</h3>
-                <p class="tier-intro">You don't have to use the same Master Seed for everything. Create security tiers to limit exposure if a low-priority account is compromised:</p>
-                
-                <div class="tiers-grid">
-                    <div class="tier-card">
-                        <h4>⭐ Low Tier Security</h4>
-                        <p>Use a **simple seed** (e.g., "movies") for low-risk sites like Netflix, Newsletters, or Forums.</p>
-                    </div>
-                    <div class="tier-card">
-                        <h4>👑 High Tier Security</h4>
-                        <p>Use a **complex seed** (e.g., "MySafeBank$2025!") **exclusively** for high-value accounts like Banking, Email, and Cloud Storage.</p>
+                    <div class="col-md-3">
+                        <div class="step-circle bg-dark text-white mx-auto mb-3">3</div>
+                        <h4 class="h6 fw-bold">Generate Hash</h4>
+                        <p class="small text-muted">Mind Vault calculates a unique password using SHA-256.</p>
                     </div>
                 </div>
+
+                <hr class="my-5">
+
+                <h3 class="h5 mb-4">How Can I Use Different Security Levels for My Passwords?</h3>
+                <p class="text-muted fst-italic mb-5">You don't have to use the same Master Seed for everything. Create
+                    security tiers to limit exposure if a low-priority account is compromised:</p>
+
+                <div class="row justify-content-center g-4 mb-5">
+                    <div class="col-md-5">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body p-4 text-start">
+                                <h4 class="h5 mb-3 text-warning">⭐ Low Tier Security</h4>
+                                <p class="card-text text-muted">Use a <strong>simple seed</strong> (e.g., "movies") for
+                                    low-risk sites like Netflix, Newsletters, or Forums.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body p-4 text-start">
+                                <h4 class="h5 mb-3 text-success">👑 High Tier Security</h4>
+                                <p class="card-text text-muted">Use a <strong>complex seed</strong> (e.g.,
+                                    "MySafeBank$2025!") <strong>exclusively</strong> for high-value accounts like
+                                    Banking, Email, and Cloud Storage.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 
-                <p class="tier-benefit">**The Benefit?** If you ever compromise your "leisure" seed, your high-tier accounts remain armored with a completely different, dedicated seed.</p>
+                <div class="alert alert-secondary d-inline-block text-start" role="alert">
+                    <strong>The Benefit?</strong> If you ever compromise your "leisure" seed, your high-tier accounts
+                    remain armored with a completely different, dedicated seed.
+                </div>
             </div>
         </section>
-        
-        <section id="about">
-            <div class="container about-container">
-                <div class="about-text">
-                    <h2>About the Developer</h2>
-                    <p>Hi, I'm <strong>Guillermo</strong>.</p>
-                    <p>I consider myself lucky for the opportunities life has given me. My philosophy is simple: I want to give back by creating solutions that make people's digital lives safer and easier.</p>
-                    <p>I built <strong>Mind Vault</strong> because I believe privacy is a right, not a luxury product. I'm not doing this for profit; money is just a means to keep building useful tools. If this tool helps you protect your data, my goal is achieved.</p>
-                    
-                    <div class="about-links">
-                        <a href="https://paypal.me/MindVaultDev" target="_blank">☕ Buy me a coffee</a>
+
+        <section class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="text-center mb-4 fw-bold">Frequently Asked Questions (FAQ)</h2>
+                        
+                        <div class="accordion accordion-flush shadow-sm rounded" id="accordionFAQ-en">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne-en">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-en" aria-expanded="false" aria-controls="flush-collapseOne-en">
+                                        How does Mind Vault work without storing passwords?
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne-en" class="accordion-collapse collapse" aria-labelledby="flush-headingOne-en" data-bs-parent="#accordionFAQ-en">
+                                    <div class="accordion-body text-muted">
+                                        Mind Vault uses deterministic password generation with SHA-256 encryption. You provide a master seed and service name, and it mathematically calculates the same unique password every time—without ever saving it.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingTwo-en">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo-en" aria-expanded="false" aria-controls="flush-collapseTwo-en">
+                                        Is Mind Vault safe if it doesn't store passwords?
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseTwo-en" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo-en" data-bs-parent="#accordionFAQ-en">
+                                    <div class="accordion-body text-muted">
+                                        Yes. Mind Vault is actually safer because there's no database to hack. Passwords are generated on-demand using cryptographic hashing (SHA-256), so even if someone accesses your device, they can't steal a password vault that doesn't exist.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingThree-en">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree-en" aria-expanded="false" aria-controls="flush-collapseThree-en">
+                                        Can Mind Vault work completely offline?
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseThree-en" class="accordion-collapse collapse" aria-labelledby="flush-headingThree-en" data-bs-parent="#accordionFAQ-en">
+                                    <div class="accordion-body text-muted">
+                                        Yes. Mind Vault runs 100% locally in your browser with no internet connection required. All password generation happens on your device using client-side JavaScript.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="card border-0 shadow-lg overflow-hidden">
+                            <div class="row g-0">
+                                <div class="col-md-4 bg-light d-flex align-items-center justify-content-center p-4">
+                                    <div class="profile-circle shadow-sm"
+                                        style="width: 150px; height: 150px; border-radius: 50%; background-color: #ddd; background-image: url('GuillermoRio.jpeg'); background-size: cover; background-position: center;">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body p-5 text-start">
+                                        <h2 class="mb-4 text-dark">About the Developer</h2>
+                                        <p class="lead mb-3">Hi, I'm <strong>Guillermo Vélez</strong>,</p>
+                                        <p class="text-muted mb-3">I live in Barcelona (Spain) and with over 20 years of experience working in IT and systems architecture, I consider myself fortunate for the opportunities life has given me. My passion is to contribute to society in the only way I know and can: by creating solutions that make people's digital lives safer and easier.</p>
+                                        <p class="text-muted mb-4">I built <strong>Mind Vault</strong> because I believe privacy is a right, not a luxury product. I'm not doing this for profit; money is just a means to keep building useful tools. If this tool helps you protect your data, my goal is achieved.</p>
+                                        <div>
+                                            <a href="https://paypal.me/MindVaultDev" target="_blank"
+                                                class="btn btn-primary rounded-pill px-4 fw-bold">☕ Buy me a coffee</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
+
     <div id="es" style="display:none;">
-        <header>
-            <div class="hero-content">
-                <h1>Tu Mente es Tu Fortaleza.</h1>
-                <p>El único gestor de contraseñas que no gestiona contraseñas.<br>Sin estado. Desconectado. Inquebrantable.</p>
-                
-                <div class="cta-buttons">
-                    <a href="#" class="btn-primary">Descargar para Chrome</a>
-                    <a href="https://github.com/guillermo377/MindVault" class="btn-secondary">Ver Código Fuente</a>
+        
+        <div class="container-fluid bg-white border-bottom py-3">
+            <div class="container">
+                <p class="lead text-center mb-0">
+                    <strong>Mind Vault es un generador de contraseñas "stateless" (sin estado) que crea claves SHA-256 únicas sin almacenarlas en ningún lugar: sin base de datos, sin nube, 100% offline.</strong>
+                </p>
+            </div>
+        </div>
+
+        <header class="py-5 text-center bg-light-gradient">
+            <div class="container py-5">
+                <h1 class="display-4 fw-bold text-dark mb-3">Tu Mente es Tu Fortaleza.</h1>
+                <p class="lead text-secondary mb-4">El único gestor de contraseñas que no gestiona contraseñas.<br>Sin
+                    estado. Desconectado. Inquebrantable.</p>
+
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="#" class="btn btn-primary btn-lg rounded-pill px-4">Descargar para Chrome</a>
+                    <a href="https://github.com/guillermo377/MindVault"
+                        class="btn btn-outline-secondary btn-lg rounded-pill px-4">Ver Código Fuente</a>
                 </div>
-                <p class="small-note">Versión 1.0 • Gratis y de Código Abierto</p>
+                <p class="text-muted mt-3 small">Versión 1.0 • Gratis y de Código Abierto</p>
             </div>
         </header>
 
-        <section id="features">
+        <section id="features-es" class="py-5">
             <div class="container">
-                <h2>¿Por Qué Confiar en Mind Vault?</h2>
-                <div class="grid">
-                    <div class="card">
-                        <h3>🚫 Sin Base de Datos</h3>
-                        <p>Los hackers no pueden robar lo que no existe. No almacenamos tus contraseñas; las calculamos matemáticamente sobre la marcha.</p>
+                <h2 class="text-center mb-5 text-dark">¿Por Qué Confiar en Mind Vault?</h2>
+                <div class="row g-4">
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <h3 class="h4 text-primary mb-3">🚫 Sin Base de Datos</h3>
+                                <p class="card-text text-muted">Los hackers no pueden robar lo que no existe. No
+                                    almacenamos tus contraseñas; las calculamos matemáticamente sobre la marcha.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card">
-                        <h3>🔒 Cifrado SHA-256</h3>
-                        <p>Criptografía de grado militar que asegura que tu Semilla Maestra genera una contraseña única y compleja para cada sitio.</p>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <h3 class="h4 text-primary mb-3">🔒 Cifrado SHA-256</h3>
+                                <p class="card-text text-muted">Criptografía de grado militar que asegura que tu Semilla
+                                    Maestra genera una contraseña única y compleja para cada sitio.</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card">
-                        <h3>✈️ 100% Desconectado</h3>
-                        <p>Mind Vault se ejecuta localmente en tu navegador. Ningún dato abandona tu dispositivo. No se requiere sincronización en la nube.</p>
+                    <div class="col-md-4">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body text-center p-4">
+                                <h3 class="h4 text-primary mb-3">✈️ 100% Desconectado</h3>
+                                <p class="card-text text-muted">Mind Vault se ejecuta localmente en tu navegador. Ningún
+                                    dato abandona tu dispositivo. No se requiere sincronización en la nube.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="how-it-works" class="bg-light">
-            <div class="container">
-                <h2>Las Matemáticas Detrás de la Magia</h2>
-                <p>Es un simple determinismo. Ingresa la misma semilla y servicio, obtén la misma contraseña.</p>
-                
-                <h3>Cómo Usar Mind Vault (Esquema)</h3>
-                <div class="steps schema-steps">
-                    <div class="step">
-                        <span class="number">1</span>
-                        <h4>Ingresa Semilla Maestra</h4>
-                        <p>Tu frase secreta (solo tú la conoces).</p>
+        <section id="how-it-works-es" class="py-5 bg-light">
+            <div class="container text-center">
+                <h2 class="mb-3 text-dark">Las Matemáticas Detrás de la Magia</h2>
+                <p class="text-muted mb-5">Es un simple determinismo. Ingresa la misma semilla y servicio, obtén la
+                    misma contraseña.</p>
+
+                <h3 class="h5 mb-4">Cómo Usar Mind Vault (Esquema)</h3>
+                <div class="row justify-content-center align-items-center g-4 mb-5">
+                    <div class="col-md-3">
+                        <div class="step-circle bg-dark text-white mx-auto mb-3">1</div>
+                        <h4 class="h6 fw-bold">Ingresa Semilla Maestra</h4>
+                        <p class="small text-muted">Tu frase secreta (solo tú la conoces).</p>
                     </div>
-                    <div class="step">
-                        <span class="arrow">➡️</span>
+                    <div class="col-md-1 d-none d-md-block">
+                        <span class="display-6 text-primary">➡️</span>
                     </div>
-                    <div class="step">
-                        <span class="number">2</span>
-                        <h4>Ingresa Nombre del Servicio</h4>
-                        <p>El dominio del sitio web (ej: "google.com").</p>
+                    <div class="col-md-3">
+                        <div class="step-circle bg-dark text-white mx-auto mb-3">2</div>
+                        <h4 class="h6 fw-bold">Ingresa Nombre del Servicio</h4>
+                        <p class="small text-muted">El dominio del sitio web (ej: "google.com").</p>
                     </div>
-                    <div class="step">
-                        <span class="arrow">➡️</span>
+                    <div class="col-md-1 d-none d-md-block">
+                        <span class="display-6 text-primary">➡️</span>
                     </div>
-                    <div class="step">
-                        <span class="number">3</span>
-                        <h4>Generar Hash</h4>
-                        <p>Mind Vault calcula una contraseña única usando SHA-256.</p>
-                    </div>
-                </div>
-                <hr>
-                
-                <h3>Mejor Práctica de Seguridad: Niveles</h3>
-                <p class="tier-intro">No tienes que usar la misma Semilla Maestra para todo. Crea niveles de seguridad para limitar la exposición si una cuenta de baja prioridad se ve comprometida:</p>
-                
-                <div class="tiers-grid">
-                    <div class="tier-card">
-                        <h4>⭐ Nivel de Seguridad Bajo</h4>
-                        <p>Usa una **semilla simple** (ej: "peliculas") para sitios de bajo riesgo como Netflix, boletines o foros.</p>
-                    </div>
-                    <div class="tier-card">
-                        <h4>👑 Nivel de Seguridad Alto</h4>
-                        <p>Usa una **semilla compleja** (ej: "MiBancoSeguro$2025!") **exclusivamente** para cuentas de alto valor como Banca, Correo Electrónico y Almacenamiento en la Nube.</p>
+                    <div class="col-md-3">
+                        <div class="step-circle bg-dark text-white mx-auto mb-3">3</div>
+                        <h4 class="h6 fw-bold">Generar Hash</h4>
+                        <p class="small text-muted">Mind Vault calcula una contraseña única usando SHA-256.</p>
                     </div>
                 </div>
+
+                <hr class="my-5">
                 
-                <p class="tier-benefit">**¿El Beneficio?** Si alguna vez comprometes tu semilla de "ocio", tus cuentas de nivel alto seguirán blindadas con una semilla completamente diferente y dedicada.</p>
+                <h3 class="h5 mb-4">¿Cómo Puedo Usar Diferentes Niveles de Seguridad?</h3>
+                <p class="text-muted fst-italic mb-5">No tienes que usar la misma Semilla Maestra para todo. Crea niveles de seguridad para limitar la exposición si una cuenta de baja prioridad se ve comprometida:</p>
+
+                <div class="row justify-content-center g-4 mb-5">
+                    <div class="col-md-5">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body p-4 text-start">
+                                <h4 class="h5 mb-3 text-warning">⭐ Nivel de Seguridad Bajo</h4>
+                                <p class="card-text text-muted">Usa una <strong>semilla simple</strong> (ej: "peliculas") para sitios de bajo riesgo como Netflix, Boletines o Foros.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="card h-100 border-0 shadow-sm">
+                            <div class="card-body p-4 text-start">
+                                <h4 class="h5 mb-3 text-success">👑 Nivel de Seguridad Alto</h4>
+                                <p class="card-text text-muted">Usa una <strong>semilla compleja</strong> (ej: "MiBancoSeguro$2025!") <strong>exclusivamente</strong> para cuentas de alto valor como Banca, Correo Electrónico y Almacenamiento en la Nube.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-secondary d-inline-block text-start" role="alert">
+                    <strong>¿El Beneficio?</strong> Si alguna vez comprometes tu semilla de "ocio", tus cuentas de nivel alto seguirán blindadas con una semilla completamente diferente y dedicada.
+                </div>
             </div>
         </section>
-        
-        <section id="about">
-            <div class="container about-container">
-                <div class="about-text">
-                    <h2>Sobre el Desarrollador</h2>
-                    <p>Hola, soy <strong>Guillermo</strong>.</p>
-                    <p>Me considero afortunado por las oportunidades que la vida me ha dado. Mi filosofía es simple: quiero devolver creando soluciones que hagan las vidas digitales de las personas más seguras y fáciles.</p>
-                    <p>Construí <strong>Mind Vault</strong> porque creo que la privacidad es un derecho, no un producto de lujo. No hago esto con fines de lucro; el dinero es solo un medio para seguir construyendo herramientas útiles. Si esta herramienta te ayuda a proteger tus datos, mi objetivo está cumplido.</p>
-                    
-                    <div class="about-links">
-                        <a href="https://paypal.me/MindVaultDev" target="_blank">☕ Invítame un café</a>
+
+        <section class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <h2 class="text-center mb-4 fw-bold">Preguntas Frecuentes (FAQ)</h2>
+                        <div class="accordion accordion-flush shadow-sm rounded" id="accordionFAQ-es">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingOne-es">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne-es" aria-expanded="false" aria-controls="flush-collapseOne-es">
+                                        ¿Cómo funciona Mind Vault sin guardar contraseñas?
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseOne-es" class="accordion-collapse collapse" aria-labelledby="flush-headingOne-es" data-bs-parent="#accordionFAQ-es">
+                                    <div class="accordion-body text-muted">
+                                        Mind Vault utiliza generación de contraseñas determinista con cifrado SHA-256. Proporcionas una semilla maestra y un nombre de servicio, y calcula matemáticamente la misma contraseña única cada vez, sin guardarla nunca.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingTwo-es">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseTwo-es" aria-expanded="false" aria-controls="flush-collapseTwo-es">
+                                        ¿Es seguro si no guarda contraseñas?
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseTwo-es" class="accordion-collapse collapse" aria-labelledby="flush-headingTwo-es" data-bs-parent="#accordionFAQ-es">
+                                    <div class="accordion-body text-muted">
+                                        Sí. Mind Vault es de hecho más seguro porque no hay una base de datos que hackear. Las contraseñas se generan bajo demanda usando hashing criptográfico (SHA-256), por lo que incluso si alguien accede a tu dispositivo, no puede robar una bóveda de contraseñas que no existe.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="flush-headingThree-es">
+                                    <button class="accordion-button collapsed fw-bold" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseThree-es" aria-expanded="false" aria-controls="flush-collapseThree-es">
+                                        ¿Puede Mind Vault funcionar completamente offline?
+                                    </button>
+                                </h2>
+                                <div id="flush-collapseThree-es" class="accordion-collapse collapse" aria-labelledby="flush-headingThree-es" data-bs-parent="#accordionFAQ-es">
+                                    <div class="accordion-body text-muted">
+                                        Sí. Mind Vault se ejecuta 100% localmente en tu navegador sin requerir conexión a internet. Toda la generación de contraseñas ocurre en tu dispositivo usando JavaScript del lado del cliente.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about-es" class="py-5">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-10">
+                        <div class="card border-0 shadow-lg overflow-hidden">
+                            <div class="row g-0">
+                                <div class="col-md-4 bg-light d-flex align-items-center justify-content-center p-4">
+                                    <div class="profile-circle shadow-sm"
+                                        style="width: 150px; height: 150px; border-radius: 50%; background-color: #ddd; background-image: url('GuillermoRio.jpeg'); background-size: cover; background-position: center;">
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body p-5 text-start">
+                                        <h2 class="mb-4 text-dark">Sobre el Desarrollador</h2>
+                                        <p class="lead mb-3">Hola, soy <strong>Guillermo Vélez</strong>,</p>
+                                        <p class="text-muted mb-3">Vivo en Barcelona (España) y con más de 20 años de experiencia trabajando en IT y arquitectura de sistemas, me considero afortunado por las oportunidades que la vida me ha dado. Mi pasión es contribuir a la sociedad de la única forma que se y puedo: creando soluciones que hagan las vidas digitales de las personas más seguras y fáciles.</p>
+                                        <p class="text-muted mb-4">Construí <strong>Mind Vault</strong> porque creo que la privacidad es un derecho, no un producto de lujo. No hago esto con fines de lucro; el dinero es solo un medio para seguir construyendo herramientas útiles. Si esta herramienta te ayuda a proteger tus datos, mi objetivo está cumplido.</p>
+                                        <div>
+                                            <a href="https://paypal.me/MindVaultDev" target="_blank"
+                                                class="btn btn-primary rounded-pill px-4 fw-bold">☕ Invítame un café</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
     </div>
-    <footer>
+
+    <footer class="bg-dark text-light py-4 text-center">
         <div class="container">
-            <p>&copy; 2025 Mind Vault. Open Source (GPLv3).</p>
-            <p>
-                <a href="https://github.com/guillermo377/MindVault/blob/main/PRIVACY.md">Privacy Policy</a>
+            <p class="mb-2">&copy; 2025 Mind Vault. Open Source (GPLv3).</p>
+            <p class="mb-0">
+                <a href="https://github.com/guillermo377/MindVault/blob/main/PRIVACY.md"
+                    class="text-secondary text-decoration-none">Privacy Policy</a>
             </p>
         </div>
     </footer>
 
+    <script src="bootstrap.bundle.min.js"></script>
 </body>
+
 </html>
